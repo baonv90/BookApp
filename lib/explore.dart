@@ -82,8 +82,7 @@ class _ExploreState extends State<Explore> {
           Menu(_controller.future, () => _favorites),
           IconButton(icon: Icon(Icons.open_in_browser), onPressed: () {
             setState(() {
-              url = "http://www.opds.tienluong.info";  
-                          
+              url = "http://www.opds.tienluong.info";                 
             });
             _myController.evaluateJavascript("document.addEventListener('click')");
 
