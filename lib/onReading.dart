@@ -58,14 +58,13 @@ class _OnReadingState extends State<OnReading> {
       
         if(path.contains(".epub") && path.contains("/book"))
         {
-          //print(path);
           try {
             File file = files[i];
             EpubBookRef epubBookRef = await EpubReader.openBook(file.readAsBytesSync());
             if(epubBookRef != null)
             {
-              var id = path.substring(path.indexOf('/book') + 5, path.indexOf('.epub'));
-              var time = await file.lastModified();
+              String id = path.substring(path.indexOf('/book') + 5, path.indexOf('.epub'));
+              DateTime time = await file.lastModified();
               list.add(BookCard(epubBookRef.Title, epubBookRef.Author, id, time));
             }
           }
@@ -287,7 +286,7 @@ class BookCard extends StatelessWidget implements Comparable<BookCard>{
             end: Alignment.bottomCenter,
             // Add one stop for each color. Stops should increase from 0 to 1
             stops: [0.3, 0.9],
-            colors: _getColorGradient(int.parse(this.cover)%8),
+            colors: _getColorGradient(0),
         ),),
         child: Center(child: Text(this.title.substring(0,1),style:TextStyle(color: Colors.white, fontSize: 25))),
       ),

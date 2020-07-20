@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.freebook" android:targetSandboxVersion="1">
+    package="com.baonv.freebook" android:targetSandboxVersion="1">
 
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application
@@ -16,7 +16,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="freebook"
+        android:label="freeBook"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity

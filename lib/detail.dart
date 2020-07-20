@@ -1,5 +1,5 @@
-import 'package:freebook/data.dart';
-import 'package:freebook/readingpage.dart';
+import 'data.dart';
+import 'readingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

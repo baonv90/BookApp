@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:freebook/component/carousel_slider.dart';
-import 'package:freebook/component/flutter_percent_indicator.dart';
+import 'component/carousel_slider.dart';
+import 'component/flutter_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:freebook/data.dart';
-import 'package:freebook/readingpage.dart';
+import 'data.dart';
+import 'readingpage.dart';
 
 
 class MyBooks extends StatefulWidget {

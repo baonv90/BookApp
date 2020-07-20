@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:freebook/article.dart';
-import 'package:freebook/downloaded.dart';
-import 'package:freebook/mostread.dart';
+import 'article.dart';
+import 'downloaded.dart';
+import 'mostread.dart';
 import 'dart:convert';
 import 'package:xml2json/xml2json.dart'; 
 import 'package:http/http.dart' as http;
-import 'package:freebook/bookinfo.dart';
-import 'package:freebook/bookfromauthor.dart';
+import 'bookinfo.dart';
+import 'bookfromauthor.dart';
 import 'dart:async';
 
 
@@ -68,63 +68,83 @@ class _HomeState extends State<Home> {
       setState(() {
         isLoadingTop = true;
       });
-      http.Response response = await http.get(urlTop);
-      if (response.statusCode == 200) {
+      try
+      {
+        http.Response response = await http.get(urlTop);
+      
+        if (response.statusCode == 200) {
+            
+          xml2json.parse(response.body);
+          var jsondata = xml2json.toGData();
+          var data = json.decode(jsondata);      
+          var rest = data["feed"]["entry"] as List;
           
-        xml2json.parse(response.body);
-        var jsondata = xml2json.toGData();
-        var data = json.decode(jsondata);      
-        var rest = data["feed"]["entry"] as List;
-        
-        setState(() {
-          topList = rest.map<Article>((json) => Article.fromJson(json)).toList();
-          isLoadingTop = false;
-        });
-      } 
-      else {   
-        throw Exception('Failed to load photos');
+          setState(() {
+            topList = rest.map<Article>((json) => Article.fromJson(json)).toList();
+            isLoadingTop = false;
+          });
+        } 
+        else {   
+          throw Exception('Failed to load photos');
+        }
+      }
+      catch(e) {
+        print(e);
       }
     }
     getDataRecent() async {
       setState(() {
         isLoadingRecent = true;
       });
-      http.Response response = await http.get(urlRecent);
-      if (response.statusCode == 200) {
+      try
+      {
+        http.Response response = await http.get(urlRecent);
+      
+        if (response.statusCode == 200) {
+            
+          xml2json.parse(response.body);
+          var jsondata = xml2json.toGData();
+          var data = json.decode(jsondata);      
+          var rest = data["feed"]["entry"] as List;
           
-        xml2json.parse(response.body);
-        var jsondata = xml2json.toGData();
-        var data = json.decode(jsondata);      
-        var rest = data["feed"]["entry"] as List;
-        
-        setState(() {
-          recentList = rest.map<Article>((json) => Article.fromJson(json)).toList();
-          isLoadingRecent = false;
-        });
-      } 
-      else {   
-        throw Exception('Failed to load photos');
+          setState(() {
+            recentList = rest.map<Article>((json) => Article.fromJson(json)).toList();
+            isLoadingRecent = false;
+          });
+        } 
+        else {   
+          throw Exception('Failed to load photos');
+        }
+      }
+      catch(e) {
+        print(e);
       }
     }
     getDataSearch() async {
       setState(() {
         isLoadingSearch = true;
       });
-      http.Response response = await http.get(urlSearch);
-      if (response.statusCode == 200) {
+      try {
+        http.Response response = await http.get(urlSearch);
+        if (response.statusCode == 200) {
+            
+          xml2json.parse(response.body);
+          var jsondata = xml2json.toGData();
+          var data = json.decode(jsondata);      
+          var rest = data["feed"]["entry"] as List;
           
-        xml2json.parse(response.body);
-        var jsondata = xml2json.toGData();
-        var data = json.decode(jsondata);      
-        var rest = data["feed"]["entry"] as List;
-        
-        setState(() {
-          searchList = rest.map<Article>((json) => Article.fromJson(json)).toList();
-          isLoadingSearch = false;
-        });
-      } 
-      else {   
-        throw Exception('Failed to load');
+          setState(() {
+            searchList = rest.map<Article>((json) => Article.fromJson(json)).toList();
+            isLoadingSearch = false;
+          });
+        } 
+        else {   
+          throw Exception('Failed to load');
+        }
+      }
+      catch(e)
+      {
+        searchList = null;
       }
     }
 
@@ -229,6 +249,8 @@ class _HomeState extends State<Home> {
         ),
         
       ],),),
+
+      topList != null ?
       Container(
         height: 130,
         child: isLoadingTop? 
@@ -240,7 +262,12 @@ class _HomeState extends State<Home> {
           itemCount: 10,
           itemBuilder: (BuildContext context, int index) {
              return bookCard(topList[index]);
-          }),),
+          }),):
+          Container( 
+            height: 130,
+            
+            child: Center(child: Text("We have encountered some errors loading this page! \n Please try again later ...", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),)
+          )),
       SizedBox(height: 10,),
       Divider
       (
@@ -294,7 +321,7 @@ class _HomeState extends State<Home> {
           child: Text("Voir tout", style: seeAll),
         ),
       ],),),
-      Container(
+      recentList != null ? Container(
         height: 130,
         child: isLoadingRecent? 
           Center(
@@ -305,7 +332,12 @@ class _HomeState extends State<Home> {
           itemCount: 10,
           itemBuilder: (BuildContext context, int index) {
              return bookCard(recentList[index]);
-          }),),
+          }))
+          : Container( 
+            height: 130,
+            
+            child: Center(child: Text("We have encountered some errors loading this page! \n Please try again later ...", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),)
+          )),
       SizedBox(height: 10,),
       Divider
       (
@@ -326,13 +358,14 @@ class _HomeState extends State<Home> {
         Text("Les plus recherchés", style: txtstyle),
         Spacer(),
         InkWell(
-          onTap: () 
+          onTap: searchList != null  ? () 
           {               
               Navigator.push(context, MaterialPageRoute(builder: (context) => MostRead("Les plus recherchés", searchList)));
-          },
+          } : null,
           child: Text("Voir tout", style: seeAll),
         ),
       ],),),
+      searchList != null ? 
       Container(
         height: 130,
         child: isLoadingSearch? 
@@ -344,7 +377,11 @@ class _HomeState extends State<Home> {
           itemCount: 10,
           itemBuilder: (BuildContext context, int index) {
              return bookCard(searchList[index]);
-          }),),
+          }),) : Container( 
+            height: 130,
+            
+            child: Center(child: Text("We have encountered some errors loading this page! \n Please try again later ...", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),)
+          )),
       SizedBox(height: 10,)
       ],
     );

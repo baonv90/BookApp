@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:freebook/article.dart';
+import 'article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
@@ -49,6 +49,7 @@ class _DetailState extends State<BookInfo> {
   @override
     void initState() {
       super.initState();
+      print('init');
       client = new HttpClient();
       book = widget.book;
       _controller = ScrollController();
@@ -96,7 +97,7 @@ class _DetailState extends State<BookInfo> {
   downloadBook() async {
     _progressButtonState = 1;
     url = book.link;
-    print(url);
+    //print(url);
     client.getUrl(Uri.parse(url))
       .then((HttpClientRequest request) {
         return request.close();
@@ -290,7 +291,7 @@ class _DetailState extends State<BookInfo> {
 
     final appBar = AppBar(
       elevation: 0,
-      title: Text('Description', style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
+      title: Text('Book Description', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
     );
    
     final topLeft =    
@@ -313,7 +314,7 @@ class _DetailState extends State<BookInfo> {
               ),
             ),
           ),
-          text(book.category, color: Colors.white70, size: 15),
+          text(book.category, color: Colors.white70, size: 10),
           SizedBox(height: 20,),
 
         ],
@@ -368,7 +369,7 @@ class _DetailState extends State<BookInfo> {
             end: Alignment.bottomCenter,
             // Add one stop for each color. Stops should increase from 0 to 1
             stops: [0.5, 1],
-            colors: _getColorGradient(int.parse(book.id)%8),
+            colors: _getColorGradient(0)//_getColorGradient(int.parse(book.id)%8),
          ),
       ),
      
@@ -463,9 +464,9 @@ class _DetailState extends State<BookInfo> {
       child: this.loading ? SingleChildScrollView(
         padding: EdgeInsets.all(8.0),
         child: Html(data: book.description,
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(16.0),
                 backgroundColor: Colors.white12,
-                defaultTextStyle: TextStyle(fontSize: 16, height: 1.2, wordSpacing: 1, fontWeight: FontWeight.w100 , color: Colors.black87),)):
+                defaultTextStyle: TextStyle(fontSize: 14, height: 1.5, wordSpacing: 1.2, fontWeight: FontWeight.normal , color: Colors.black87),)):
   
         ListView.builder(
             controller: _controller,
@@ -482,11 +483,12 @@ class _DetailState extends State<BookInfo> {
                   });
                 },
                 child: Container(
+                  
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.0, style: BorderStyle.solid,color: Colors.black12)),  color: index!=currentChap ? Colors.transparent: Colors.blue), 
                   child: Padding(
                     padding: EdgeInsets.only(left: 16.0, top: 12.0, bottom: 12.0),
-                    child: Text(getTiteElement(subChapters[index]["data"], index), style: TextStyle(fontSize: 16),),
+                    child: Text(getTiteElement(subChapters[index]["data"], index), style: TextStyle(fontSize: 13),),
                   ),
                 )
               );
@@ -502,13 +504,14 @@ class _DetailState extends State<BookInfo> {
       ),
     );
   }
-  text(String data, {Color color = Colors.black87, num size = 14,
+  text(String data, {Color color = Colors.black87, num size = 13,
     EdgeInsetsGeometry padding = EdgeInsets.zero,
       bool isBold = false}) => 
       Padding(
         padding: padding,
         child: Text(
-          data,
+          data.length > 60 ? data.substring(0, 57) + "..." : data,
+          maxLines: 3,
           style: TextStyle(
               color: color,
               fontSize: size.toDouble(),

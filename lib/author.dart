@@ -26,23 +26,26 @@ class _AuthorState extends State<Author> {
     setState(() {
         isLoading = true;
     });
-    final response = await http.get('http://opds.tienluong.info/ios/ebooksgratuit/get_authors.php');
+    try
+    {
+      final response = await http.get('http://opds.tienluong.info/ios/ebooksgratuit/get_authors.php');
 
-    if (response.statusCode == 200) {
-      if (mounted){
-        setState(() {
-          listAuthors = json.decode(response.body) as List;
-          
-          //listAuthors = listAuthors.reversed.toList();
-          isLoading = false;
-          listDisplay = listAuthors.reversed.toList();
-        });
-     }
-    } 
-    else {
-      throw Exception('Failed to load file');
+      if (response.statusCode == 200) {
+        if (mounted){
+          setState(() {
+            listAuthors = json.decode(response.body) as List;
+            //listAuthors = listAuthors.reversed.toList();
+            isLoading = false;
+            listDisplay = listAuthors.reversed.toList();
+          });
+      }
+      } 
+      else {
+        throw Exception('Failed to load file');
+      }
+    }catch(e) {
+      print(e);
     }
-    
   }
   TextEditingController editingController = TextEditingController();
   void filterSearchResults(String query) {

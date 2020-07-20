@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:freebook/home.dart';
+import 'home.dart';
 import 'explore.dart';
-import 'package:freebook/author.dart';
-import 'package:freebook/search.dart';
-import 'package:freebook/onReading.dart';
+import 'author.dart';
+import 'search.dart';
+import 'onReading.dart';
 
 
 
@@ -19,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 
 class SplashScreenState extends State<SplashScreen> {
 
-  @override
+@override
   void initState() {
     super.initState();
     loadData();
@@ -30,12 +31,12 @@ loadData() async {
 }
 
 onDoneLoading() async {
-  runApp(MyBookApp());
+  runApp(MyBookApp(index: 0,));
 }
 
 
-  @override
-  Widget build(BuildContext context) {
+@override
+Widget build(BuildContext context) {
     return Container(
      
       decoration: BoxDecoration(
@@ -78,18 +79,12 @@ class MyInheritedWidget extends InheritedWidget {
  
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
-  
-  //MyInheritedWidget({Widget child}) : super(child: child);
-  
-  // @override
-  // bool updateShouldNotify(MyInheritedWidget old) => true;
-
   static MyInheritedWidget of (BuildContext context) => context.inheritFromWidgetOfExactType(MyInheritedWidget); 
-    //accountId != old.accountId || scopeId != old.scopeId;
 }
 
 class MyBookApp extends StatefulWidget{
-   MyBookApp({Key key}) : super(key: key);
+  final int index;
+  MyBookApp({Key key, this.index}) : super(key: key);
   @override
   _MyBookAppState createState() => _MyBookAppState();
 }
@@ -110,7 +105,14 @@ class _MyBookAppState extends State<MyBookApp> {
       900: const Color(0xFFFFFFFF),
     },
   );
-  int _selectedIndex = 0;
+  int _selectedIndex;
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      _selectedIndex = widget.index;
+
+    }
   final pageController = PageController();
   void onPageChanged(int index) {
     setState(() {
@@ -119,7 +121,7 @@ class _MyBookAppState extends State<MyBookApp> {
   }
   
   
-  List<Widget> _pageOptions = [Home(), Author(), Search(), OnReading()];
+  // List<Widget> _pageOptions = [Home(), Author(), Search(), OnReading()];
   Shader linearGradient = LinearGradient(
     colors: <Color>[Colors.red, Colors.blue],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 100.0, 70.0));

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:freebook/article.dart';
+import 'article.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart'; 
-import 'package:freebook/bookinfo.dart';
+import 'bookinfo.dart';
 
 
 
